@@ -54,3 +54,16 @@ Docker Compose est utilisé pour gérer les différents services de l'applicatio
 
 5. Accédez au client à [http://localhost:3000](http://localhost:3000).
 
+
+## Screens
+### Application
+![Application](https://raw.githubusercontent.com/achrafladhari/projet-microservices/main/screens/screen1.png)
+
+### Images
+![Images](https://raw.githubusercontent.com/achrafladhari/projet-microservices/main/screens/screen3.png)
+### Containers
+![Containers](https://raw.githubusercontent.com/achrafladhari/projet-microservices/main/screens/screen4.png)
+### Network
+![Network](https://raw.githubusercontent.com/achrafladhari/projet-microservices/main/screens/screen2.png)
+
+
