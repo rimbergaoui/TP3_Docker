@@ -95,7 +95,7 @@ pipeline {
                     docker.rmi("${IMAGE_NAME_SERVER}")
                     sh "docker rmi ${IMAGE_NAME_SERVER}"
                     if (docker.imageExists('aquasec/trivy')){
-                        docker.rmi('docker rmi aquasec/trivy')
+                        sh 'docker rmi aquasec/trivy'
                     }
                 }
             }
@@ -106,7 +106,7 @@ pipeline {
                 script {
                     docker.rmi("${IMAGE_NAME_CLIENT}")
                     if (docker.imageExists('aquasec/trivy')){
-                        docker.rmi('docker rmi aquasec/trivy')
+                        sh 'docker rmi aquasec/trivy'
                     }                
                 }                
             }
