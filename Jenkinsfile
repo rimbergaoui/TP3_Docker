@@ -32,7 +32,7 @@ pipeline {
         }
 
         stage('Build Client Image') {
-         //   when { changeset "client/*"}
+            when { changeset "client/*"}
             steps {
                 dir('client') {
                     script {
@@ -43,7 +43,7 @@ pipeline {
         }
 
         stage('Scan Server Image') {
-          //  when { changeset "server/*"}
+            when { changeset "server/*"}
             steps {
                 script {
                     sh """
@@ -56,7 +56,7 @@ pipeline {
         }
 
         stage('Scan Client Image') {
-         //   when { changeset "client/*"}
+            when { changeset "client/*"}
             steps {
                 script {
                     sh """
@@ -68,7 +68,8 @@ pipeline {
             }
         }
 
-        stage('Push Server Images to Docker Hub') {
+        stage('Push Server Image to Docker Hub') {
+            when { changeset "server/*"}
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
@@ -78,6 +79,7 @@ pipeline {
             }
         }
         stage('Push Client Image to Docker Hub') {
+            when { changeset "client/*"}
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
@@ -86,15 +88,23 @@ pipeline {
                 }
             }
         }        
-        stage('Cleanup locally'){
+        stage('Cleanup Server locally'){
+            when { changeset "server/*"}
             steps {
                 script {
                     sh "docker rmi ${IMAGE_NAME_SERVER}"
-                    sh "docker rmi ${IMAGE_NAME_CLIENT}"
-                    sh "docker rmi aquasec/trivy"
+                    docker.imageExists('aquasec/trivy') ? sh "docker rmi aquasec/trivy" : echo "image trivy doesn't exist"
                 }
             }
         }
-        
+        stage('Cleanup Client locally'){
+            when { changeset "client/*"}
+            steps {
+                script {
+                    sh "docker rmi ${IMAGE_NAME_CLIENT}"
+                    docker.imageExists('aquasec/trivy') ? sh "docker rmi aquasec/trivy" : echo "image trivy doesn't exist"
+                }                
+            }
+        }
     }
 }
