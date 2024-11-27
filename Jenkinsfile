@@ -88,27 +88,13 @@ pipeline {
                 }
             }
         }        
-        stage('Cleanup Server locally'){
-           // when { changeset "server/*"}
-            steps {
+        post {
+            always {
                 script {
-                    docker.rmi("${IMAGE_NAME_SERVER}")
-                    sh "docker rmi ${IMAGE_NAME_SERVER}"
-                    if (docker.imageExists('aquasec/trivy')){
-                        sh 'docker rmi aquasec/trivy'
-                    }
-                }
-            }
-        }
-        stage('Cleanup Client locally'){
-           // when { changeset "client/*"}
-            steps {
-                script {
-                    docker.rmi("${IMAGE_NAME_CLIENT}")
-                    if (docker.imageExists('aquasec/trivy')){
-                        sh 'docker rmi aquasec/trivy'
-                    }                
-                }                
+                docker.rmi("${IMAGE_NAME_SERVER}") 
+                docker.rmi("${IMAGE_NAME_CLIENT}")
+                docker.rmi('docker rmi aquasec/trivy')                
+                } 
             }
         }
     }
