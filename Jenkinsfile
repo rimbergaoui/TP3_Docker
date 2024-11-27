@@ -92,9 +92,11 @@ pipeline {
     }
     post {
         always {
-            docker.rmi("${IMAGE_NAME_SERVER}") 
-            docker.rmi("${IMAGE_NAME_CLIENT}")
-            docker.rmi('docker rmi aquasec/trivy')                
+            script {
+                docker.rmi("${IMAGE_NAME_SERVER}") 
+                docker.rmi("${IMAGE_NAME_CLIENT}")
+                docker.rmi('docker rmi aquasec/trivy')                
+            } 
         }
     }
 }
