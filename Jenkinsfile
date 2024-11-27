@@ -48,6 +48,7 @@ pipeline {
                 script {
                     sh """
                     docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \\
+                    -e TRIVY_DB_REPO=ghcr.io/aquasecurity/trivy-db \\
                     aquasec/trivy:latest image --exit-code 0 --severity LOW,MEDIUM,HIGH,CRITICAL \\
                     ${IMAGE_NAME_SERVER}
                     """
@@ -61,6 +62,7 @@ pipeline {
                 script {
                     sh """
                     docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \\
+                    -e TRIVY_DB_REPO=ghcr.io/aquasecurity/trivy-db \\
                     aquasec/trivy:latest image --exit-code 0 --severity LOW,MEDIUM,HIGH,CRITICAL \\
                     ${IMAGE_NAME_CLIENT}
                     """
