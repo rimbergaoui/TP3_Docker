@@ -21,6 +21,7 @@ pipeline {
         }
 
         stage('Build Server Image') {
+           // when { changeset "server/*"}
             steps {
                 dir('server') {
                     script {
@@ -31,6 +32,7 @@ pipeline {
         }
 
         stage('Build Client Image') {
+         //   when { changeset "client/*"}
             steps {
                 dir('client') {
                     script {
@@ -41,6 +43,7 @@ pipeline {
         }
 
         stage('Scan Server Image') {
+          //  when { changeset "server/*"}
             steps {
                 script {
                     sh """
@@ -53,6 +56,7 @@ pipeline {
         }
 
         stage('Scan Client Image') {
+         //   when { changeset "client/*"}
             steps {
                 script {
                     sh """
@@ -64,15 +68,33 @@ pipeline {
             }
         }
 
-        stage('Push Images to Docker Hub') {
+        stage('Push Server Images to Docker Hub') {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
                         dockerImageServer.push()
-                        dockerImageClient.push()
                     }
                 }
             }
         }
+        stage('Push Client Image to Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
+                        dockerImageClient.push()
+                    }
+                }
+            }
+        }        
+        stage('Cleanup locally'){
+            steps {
+                script {
+                    sh "docker rmi ${IMAGE_NAME_SERVER}"
+                    sh "docker rmi ${IMAGE_NAME_CLIENT}"
+                    sh "docker rmi aquasec/trivy"
+                }
+            }
+        }
+        
     }
 }
