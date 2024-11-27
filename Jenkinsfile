@@ -88,14 +88,13 @@ pipeline {
                 }
             }
         }        
-        post {
-            always {
-                script {
-                docker.rmi("${IMAGE_NAME_SERVER}") 
-                docker.rmi("${IMAGE_NAME_CLIENT}")
-                docker.rmi('docker rmi aquasec/trivy')                
-                } 
-            }
+
+    }
+    post {
+        always {
+            docker.rmi("${IMAGE_NAME_SERVER}") 
+            docker.rmi("${IMAGE_NAME_CLIENT}")
+            docker.rmi('docker rmi aquasec/trivy')                
         }
     }
 }
