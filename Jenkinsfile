@@ -92,8 +92,9 @@ pipeline {
             when { changeset "server/*"}
             steps {
                 script {
+                    docker.rmi("${IMAGE_NAME_SERVER}")
                     sh "docker rmi ${IMAGE_NAME_SERVER}"
-                    docker.imageExists('aquasec/trivy') ? sh "docker rmi aquasec/trivy" : echo "image trivy doesn't exist"
+                    docker.imageExists('aquasec/trivy') ? docker.rmi('docker rmi aquasec/trivy') : echo "image trivy doesn't exist"
                 }
             }
         }
@@ -101,8 +102,8 @@ pipeline {
             when { changeset "client/*"}
             steps {
                 script {
-                    sh "docker rmi ${IMAGE_NAME_CLIENT}"
-                    docker.imageExists('aquasec/trivy') ? sh "docker rmi aquasec/trivy" : echo "image trivy doesn't exist"
+                    docker.rmi("${IMAGE_NAME_CLIENT}")
+                    docker.imageExists('aquasec/trivy') ? docker.rmi('docker rmi aquasec/trivy') : echo "image trivy doesn't exist"
                 }                
             }
         }
