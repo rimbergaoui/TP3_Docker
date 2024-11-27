@@ -93,9 +93,17 @@ pipeline {
     post {
         always {
             script {
-                sh "docker rmi ${IMAGE_NAME_SERVER}"
-                sh "docker rmi ${IMAGE_NAME_CLIENT}"
-                sh 'docker rmi aquasec/trivy'               
+                echo 'Cleanup phase!'
+                if (sh(script: "docker images -q aquasec/trivy", returnStdout: true).trim()) {
+                    sh 'docker rmi aquasec/trivy'               
+                }
+                if (sh(script: "docker images -q ${IMAGE_NAME_SERVER}", returnStdout: true).trim()) {
+                    sh "docker rmi ${IMAGE_NAME_SERVER}"
+                }
+                if (sh(script: "docker images -q ${IMAGE_NAME_CLIENT}", returnStdout: true).trim()) {
+                    sh "docker rmi ${IMAGE_NAME_CLIENT}"
+                }
+                echo 'Cleanup Succefully done!'
             } 
         }
     }
