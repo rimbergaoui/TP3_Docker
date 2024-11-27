@@ -21,7 +21,7 @@ pipeline {
         }
 
         stage('Build Server Image') {
-           // when { changeset "server/*"}
+            when { changeset "server/*"}
             steps {
                 dir('server') {
                     script {
