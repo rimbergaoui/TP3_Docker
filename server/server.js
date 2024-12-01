@@ -18,6 +18,7 @@ const dbo = require("./db/conn");
 dbo.connectToMongoDB(function (error) {
   if (error) throw error;
 console.log("the server is running");
+console.log( process.env.MONGO_URI);
 });
 app.listen(port, () => {
   console.log("Server is running on port: " + port);
